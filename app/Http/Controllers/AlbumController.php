@@ -9,10 +9,11 @@ use App\Models\Song;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 
 class AlbumController extends Controller
 {
-    public function createAlbum(albumCreateRequest $request)
+    public function createAlbum(albumCreateRequest $request):JsonResponse
     {
         $songs = collect($request->get("songs"));
         $songsFiles = $request->file("songs");
@@ -39,7 +40,7 @@ class AlbumController extends Controller
 
     }
 
-    public function getLatestAlbums()
+    public function getLatestAlbums():JsonResponse
     {
         $albums = Album::orderBy('created_at', 'DESC')->get();
         return response()->json([
@@ -47,7 +48,7 @@ class AlbumController extends Controller
         ]);
     }
 
-    public function getAlbum($id)
+    public function getAlbum($id):JsonResponse
     {
         try{
             $album = Album::findOrFail($id);
