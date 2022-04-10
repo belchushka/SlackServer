@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AlbumController extends Controller
 {
@@ -28,7 +30,7 @@ class AlbumController extends Controller
         $songs->each(function ($song, $id)use($songsFiles, $album){
             $file = $songsFiles[$id]["file"];
             $extension = $file->getClientOriginalExtension();
-            $filePath = Carbon::now()->getTimestamp().".".$extension;
+            $filePath = Hash::make(Str::random(60)).".".$extension;
             $file->move(public_path("songs"),$filePath);
             $album->songs()->save(new Song([
                 "name"=>$song["name"],
